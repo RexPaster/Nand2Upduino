@@ -1,56 +1,228 @@
-# Upduino 3.1 SystemVerilog Development Template
+# Nand2Tetris Verilog
 
-A ready-to-use template for building SystemVerilog designs on the [Upduino 3.1](https://upduino.readthedocs.io/) (iCE40UP5K-SG48) FPGA, with a full toolchain inside a dev container (no local installs required).
+### What is this about?
+Nand2Tetris is an awesome course where you learn how to build a computer.  
+You build the all chips and architecture from the ground up, in a simplified HDL language.  
+After this, you create an assembler language, an operating system called Jack OS.  
+Then a virtual machine and a java-like language called Jack.  
 
-## Quick start
+### Why this repo?
+This is a SystemVerilog version of the course materials on hardware design.  
+The purpose is usage by other students, so go ahead, give it a try!  
+The course Nand2Tetris is on coursera https://www.coursera.org/learn/build-a-computer
+There is also a website https://www.nand2tetris.org/  
+I can also highly recommend the book from the course:  
 
-1. Open this repository in VS Code with the Dev Containers extension — the container will build automatically.
-2. Write your design in `top.sv` and your testbench in `top_tb.sv`.
-3. Add pin assignments for any new ports to `top.pcf`.
-4. Use the VS Code tasks (Terminal → Run Task) to build, verify, and program.
+**The Elements of Computing Systems**  
+*Building a Modern Computer from First Principles*
 
-## File overview
+This project is an implementation of the HACK architecture in SysytemVerilog.  
+The there is a branch per week, with the solutions of previous weeks but not the current one.
+Use this to implement the architecture yourself every week.  
+For each chip, there is a testbench to test its functionctionality.  
 
-| File | Purpose |
-|---|---|
-| `top.sv` | Top-level design module — edit this |
-| `top_tb.sv` | Testbench for simulation |
-| `top.pcf` | Pin constraint file (maps port names to physical pins) |
-| `dependencies.mk` | Lists build targets and their source file dependencies |
+## Installation
+So, you want to try to build hack in SystemVerilog!  
 
-## Tasks
+The first step is cloning thin repo, so open up your favorite terminal and type:
+```console
+$ git clone https://github.com/jopdorp/nand2tetris-verilog.git
+```
+I recommend using git, but if you don't want to use git, you can download this repository as a zip file!  
+https://bitbucket.org/jopdorp/nand2tetris-verilog/downloads/  
 
-All tasks are available via **Terminal → Run Task** (or the Tasks panel).
+### Requirements
+- python
+- iverilog
+- verilator
 
-### Edit top.sv
-Opens `top.sv` in the editor. Shortcut to jump straight to the design file.
+#### Python:
+If you don't already have python installed, you can install it as follows:
 
-### FPGA Image Server
-Starts a local web server (port 3000) that serves the generated SVG and HTML visualisation files. Must be running before opening any routing/placement views in the browser. Runs in the background — start it once per session.
+In Ubuntu you can do something like:
+```console
+$ sudo apt install python3.6
+```
+More info: https://docs.python-guide.org/starting/install3/linux/  
 
-### Simulate top.sv
-Runs Yosys on `top.sv` (RTL sources only, no testbench) and produces `products/top.rtl.json`. This JSON can be opened in the built-in netlist viewer to inspect the synthesised RTL. Useful for a quick sanity-check of your logic before running the full testbench.
+In Windows you usually would download the installer from  https://www.python.org/downloads/windows/  
 
-### top testbench verification
-Compiles `top.sv` + `top_tb.sv` with Icarus Verilog and runs the simulation. Produces `products/top_tb.vcd` — a waveform dump that can be opened with a VCD viewer (e.g. the VSCode WaveTrace extension). Check the terminal output for any assertion failures or unexpected `$finish` times.
+Mac OS X:
+```console
+$ brew install python
+```
 
-### top AIG Mapping
-Synthesises the design to an And-Inverter Graph (AIG) and opens an SVG schematic of the result. Useful for understanding the Boolean structure of combinational logic before mapping to FPGA primitives.
+### Python libraries
+When you have python installed, you can:
+```console
+$ cd nand2tetris-verilog
+$ pip install -r requirements.txt
+```
+#### Iverilog: 
+At the time this was writte, you need to buuld iverilog yourself beause we need new functionality which has not yet been released in a stable release.
+For windows you will first need to install Msys2 64 bit which can be found here:
+- https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/
+- do the following to build and install iverilog:
 
-### top iCE40 Mapping
-Runs `synth_ice40` in Yosys and opens an SVG schematic of the post-synthesis iCE40 netlist (LUTs, carry chains, flip-flops). Use this to check how many LUTs your design uses and how the logic has been decomposed into iCE40 primitives.
+for ubuntu install the prerequesites like this:
 
-### top iCE40 Bitstream
-Full build pipeline: Yosys synthesis → nextpnr place-and-route → icepack bitstream. Produces `products/top.bin`, which can be flashed to the Upduino with `iceprog`. Requires all ports listed in `top.sv` to have entries in `top.pcf`.
+```console
+$ sudo apt install flex bison gperf
+```
+then clone and build iverilog
+```console
+$ git clone https://github.com/steveicarus/iverilog.git
+$ cd iverilog
+$ git checkout v11_0
+$ sh autoconf.sh
+$ ./configure
+$ make
+$ make install
+```
+#### Verilator: 
+When you have implemented all chips, you can test the computer with verilator.
+It will open a window and poll your keyboard, which are integrated with the provided screen chip and the keyboard register in the computer chip template.
 
-### top iCE40 Routing
-Runs the full place-and-route (same as bitstream, but stops after routing) and opens an interactive HTML view showing the physical placement and routing on the iCE40 die. The FPGA Image Server must be running to view it. Also reports timing: max frequency, critical path, and slack histogram.
+Linux:
+```console
+$ sudo apt-get install -y verilator
+```
+Mac OS X:
+```console
+$ brew install verilator
+```
+Windows:
+Open Msys2 64 bit
+```console
+$ pacman -S mingw-w64-x86_64-verilator
+```
+#### A note about editors  
+I recommend using VSCode from microsoft, which has as nice system verilog plugin which it will suggest to install when you open a .sv file.
 
-## Adding ports
+If you don't want a big program like that, there are other options:
+-   Emacs https://www.gnu.org/software/emacs/download.html  
+    You'll probably want to use my config:
+    ```console
+    $ git clone https://jopdorp@bitbucket.org/jopdorp/emacs-config.git ~/.emacs.d
+    ```
+-   Atom with apio, it can be a bit of a hassle to setup.
+    - https://atom.io/
+    - https://atom.io/packages/apio-ide
+-   Notepad++, i did not try this myself. Only has Windows support.
+    - https://notepad-plus-plus.org/download/
+    - https://sourceforge.net/projects/nppverilog/  
 
-1. Declare them in `top.sv` and `top_tb.sv`.
-2. Add a `set_io <port> <pin>` line to `top.pcf`. Pin numbers are Upduino 3.1 physical pin numbers — see the [pin reference](https://upduino.readthedocs.io/en/latest/features/pins.html).
+There should also be plugins for vim and sublime text, but don't know the details about those.
 
-## Background and attribution
+## You're ready!
 
-Adapted from Bill Siever's CS2600 homework templates (Washington University in St. Louis). Uses his Docker image as the dev environment foundation.
+## Usage
+If you use windows, always yous your MSYS2 64 bit terminal.
+
+The testbenches can be run using "test.py".  
+1. It compiles all verilog files in the project
+1. It runs the test benches, by default all files that end with "_tb.sv" in the project
+
+To verify that your environment is up and running type:
+```console
+$ python test.py 00
+```
+You should see the following output:
+```console
+Starting compilation of project 00...
+iverilog -grelative-include -g2012 -o ./build/hello_verilog_tb.sv.vvp /c/dev/nand2tetris-verilog/00/hello_verilog_tb.sv
+Finished compiling!
+
+Starting tests in project 00
+Hello world!
+
+Found 0 assertion errors in hello_verilog_tb.sv.vvp
+
+
+Finished testing:
+
+From a total of 1 test benches.
+
+1 test benches ran without any runtime errors
+
+All tests succeeded!
+
+```
+Note that there is `# Hello world!` before the script quits the simulator.  
+If there are not errors and you see this message, it means everything is good to go!  
+It could be that you'll see some error, please see the [Troubleshoot section](#troubleshooting)
+
+Now you can implement your first chip.  
+I advise to start with not_n2t.sv, you can test it as follows:  
+```console
+$ python test.py 01 not_n2t_tb.sv
+```
+This should give you an assertion error:
+
+```console
+Starting compilation of project 01...
+iverilog -grelative-include -g2012 -o ./build/not_n2t_tb.sv.vvp /c/dev/newnand/nand2tetris-verilog/01/not_n2t_tb.sv
+Finished compiling!
+
+Starting tests in project 01
+not_n2t_tb.sv.vvp
+ERROR: C:/dev/newnand/nand2tetris-verilog/01/not_n2t_tb.sv:12: assertion fail! in 0 out z, expected: 1
+       Time: 1 Scope: not_n2t_tb.assert_else_error
+ERROR: C:/dev/newnand/nand2tetris-verilog/01/not_n2t_tb.sv:12: assertion fail! in 1 out z, expected: 0
+       Time: 3 Scope: not_n2t_tb.assert_else_error
+
+Found 2 assertion errors in not_n2t_tb.sv.vvp
+
+
+Finished testing:
+
+From a total of 1 test benches.
+
+0 test benches ran without any runtime errors
+
+1 test benches had errors, of which:
+1 ran, but had a total of 2 assertion errors
+```
+
+Implement the chip and rerun the test to see if it works!  
+When you chip is correctly implemented you should see the following:
+
+```console
+$ python test.py 01 not_n2t_tb.sv
+
+Starting compilation of project 01...
+iverilog -grelative-include -g2012 -o ./build/not_n2t_tb.sv.vvp /c/dev/newnand/nand2tetris-verilog/01/not_n2t_tb.sv
+Finished compiling!
+
+Starting tests in project 01
+not_n2t_tb.sv.vvp
+
+Found 0 assertion errors in not_n2t_tb.sv.vvp
+
+
+Finished testing:
+
+From a total of 1 test benches.
+
+1 test benches ran without any runtime errors
+
+All tests succeeded!
+```
+### Thanks
+- Thanks to Noam Nisan and Shimon Schocken for creating this awesome course!
+- This repo was originally forked from https://github.com/f2xeb/n2t.  
+Finding this repository convinced me that it was passible for me,  
+someone with no experience in hardware design,  
+to implement the HACK architecture in SystemVerilog.
+
+### Cool links
+#### Verilog learning material:
+- https://www.nandland.com/verilog/tutorials/tutorial-introduction-to-verilog-for-beginners.html
+- http://www.asic-world.com/verilog/veritut.html
+#### nand2tetris stuff in (System)Verilog:
+- https://github.com/f2xeb/n2t
+- https://github.com/cbrooks90/Hack-cpu
+- https://github.com/pbrit/hack-verilog
+- https://github.com/ccckmit/nand2tetris_verilog
+- https://nand2tetrisfpga.wordpress.com/category/uncategorized/
+- https://hackaday.io/project/161283-nand2tetris-in-verilog-part4-pong-simulation
