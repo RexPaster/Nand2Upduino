@@ -1,0 +1,39 @@
+{
+   "creator": "Yosys 0.57+260 (git sha1 f7120e9c2, clang++ 18.1.8 -fPIC -O3)",
+   "invocation": "stat -json ",
+   "modules": {
+      "\\top": {
+         "num_wires":         11,
+         "num_wire_bits":     11,
+         "num_pub_wires":     11,
+         "num_pub_wire_bits": 11,
+         "num_ports":         4,
+         "num_port_bits":     4,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         17,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$scopeinfo": 17
+         }
+      }
+   },
+      "design": {
+         "num_wires":         11,
+         "num_wire_bits":     11,
+         "num_pub_wires":     11,
+         "num_pub_wire_bits": 11,
+         "num_ports":         4,
+         "num_port_bits":     4,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         17,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$scopeinfo": 17
+         }
+      }
+}
+

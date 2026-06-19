@@ -53,6 +53,12 @@ while true; do
 	sleep 1
 done
 
+echo "Type 'stop' and press Enter to shut down the simulator."
+
 while true; do
-	sleep 3600
+	read -r cmd
+	if [[ "$cmd" == "stop" ]]; then
+		echo "Stopping..."
+		break
+	fi
 done

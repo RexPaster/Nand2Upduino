@@ -1,7 +1,8 @@
-`include "../03/ram_16K_optimized.sv"
-`include "screen_8K.sv"
-
-module memory(input[15:0] in, input clock, load, input[14:0] address, output[15:0] out);
+module memory(input[15:0] in,
+              input clock, load,
+              input[14:0] address,
+              output[15:0] out,
+              input[15:0] scancode_in);
   wire[15:0] outM, outS, outSK;
   wire Mload, Sload;
 
@@ -10,8 +11,10 @@ module memory(input[15:0] in, input clock, load, input[14:0] address, output[15:
 
   ram_16K_optimized ram16k(in, address[13:0], Mload,clock, outM);
   screen_8K screen(in, address[12:0], Sload, clock, outS);
-  reg [15:0] scancode /*verilator public*/;
 
-  assign outSK = address[13] ? scancode : outS;
+reg [15:0] scancode /*verilator public*/;
+
+  assign outSK = address[13] ? scancode_in : outS;
   assign out = address[14] ? outSK : outM;
+
 endmodule

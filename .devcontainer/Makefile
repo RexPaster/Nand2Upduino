@@ -53,14 +53,13 @@ YOSYS_HIERARCHY = $(if $(filter top.sv,$(notdir $(filter %.sv,$^))),hierarchy -t
 
 
 %.ice40.svg:
->  yosys -p "read_verilog -sv $^ ; $(YOSYS_HIERARCHY); synth_ice40; show -format svg -prefix $(basename $@)"
+>  yosys -p "read_verilog -sv $^ ; $(YOSYS_HIERARCHY); synth_ice40; show -format svg -prefix $(basename $@) top"
 
 %.ice40.dot:
 >  yosys -p "read_verilog -sv $^ ; $(YOSYS_HIERARCHY); synth_ice40; show -prefix $(basename $@)"
 
-
 %.aig.svg:
->  yosys -p "read_verilog -sv $^ ; $(YOSYS_HIERARCHY); proc; opt; fsm ; opt; memory; aigmap; show -format svg -prefix $(basename $@)"
+>  yosys -p "read_verilog -sv $^ ; $(YOSYS_HIERARCHY); proc; opt; fsm ; opt; memory; aigmap; show -format svg -prefix $(basename $@) top"
 
 %.ice40.rtl.json:
 >  yosys -p "read_verilog -sv $^ ; $(YOSYS_HIERARCHY); proc; opt_clean; fsm -expand; memory -nomap; wreduce -memx; opt_clean; synth_ice40; " -o $@
